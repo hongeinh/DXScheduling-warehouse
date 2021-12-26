@@ -1,8 +1,8 @@
 package variable.impl;
 
 import common.STATUS;
-import variable.component.resource.HumanResource;
-import variable.component.resource.MachineResource;
+import variable.component.resource.impl.HumanResource;
+import variable.component.resource.impl.MachineResource;
 import variable.component.resource.Resource;
 import lombok.Builder;
 import lombok.Getter;

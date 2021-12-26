@@ -1,7 +1,7 @@
 package operator.mutation.impl;
 
 import common.STATUS;
-import variable.component.resource.HumanResource;
+import variable.component.resource.impl.HumanResource;
 import variable.Variable;
 import variable.impl.Order;
 import variable.impl.Task;

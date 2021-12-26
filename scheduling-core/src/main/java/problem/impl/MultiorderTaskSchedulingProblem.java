@@ -2,12 +2,12 @@ package problem.impl;
 
 import common.STATUS;
 import variable.controller.VariableController;
-import variable.component.resource.HumanResource;
-import variable.component.resource.MachineResource;
+import variable.component.resource.impl.HumanResource;
+import variable.component.resource.impl.MachineResource;
 import variable.component.skill.Skill;
-import component.variable.Variable;
-import component.variable.impl.Order;
-import component.variable.impl.Task;
+import variable.Variable;
+import variable.impl.Order;
+import variable.impl.Task;
 import representation.Solution;
 import utils.TimeUtils;
 

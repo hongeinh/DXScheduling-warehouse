@@ -1,8 +1,8 @@
 package problem.impl;
 
-import component.controller.VariableController;
-import component.variable.Variable;
-import component.variable.impl.Task;
+import variable.controller.VariableController;
+import variable.Variable;
+import variable.impl.Task;
 import problem.Problem;
 import problem.helper.HumanResourceConflictHelper;
 import problem.helper.MachineResourceConflictHelper;
