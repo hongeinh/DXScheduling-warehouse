@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class TimeUtils {
+
 	public static long calculateTimeDifferenceWithTimeUnit (LocalDateTime firstDateTime, LocalDateTime secondDateTime, ChronoUnit unit) {
 		long time = 0;
 		if (firstDateTime.isBefore(secondDateTime)) {

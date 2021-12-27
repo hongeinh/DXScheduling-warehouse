@@ -22,7 +22,7 @@ public class Task implements Comparable<Task>, Serializable {
 	private int orderId;
 	private int id;
 	private LocalDateTime scheduledStartTime;
-	private long duration;
+	private double duration;
 	private LocalDateTime startTime;
 	private double idle;
 	private double priority;
@@ -78,7 +78,7 @@ public class Task implements Comparable<Task>, Serializable {
 			HashMap<String, Object> parameters = (HashMap <String, Object>) value;
 			this.id = (Integer) parameters.get("id");
 			this.duration =  (Long) parameters.get("duration");
-			this.scheduledStartTime = LocalDateTime.parse((String) parameters.get("scheduledTime"));
+			this.scheduledStartTime = (LocalDateTime) parameters.get("scheduledTimes");
 		}
 	}
 

@@ -11,6 +11,6 @@ import java.io.Serializable;
 @Builder
 public class Skill implements Serializable {
 
-	private int id;
-	private double experienceLevel;
+	public int id;
+	public double experienceLevel;
 }
