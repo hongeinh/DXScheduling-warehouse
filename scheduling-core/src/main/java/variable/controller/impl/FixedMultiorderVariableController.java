@@ -2,6 +2,7 @@ package variable.controller.impl;
 
 import common.STATUS;
 import representation.Solution;
+import utils.ObjectUtil;
 import variable.Variable;
 import variable.component.resource.Resource;
 import variable.component.resource.impl.HumanResource;
@@ -17,7 +18,13 @@ public class FixedMultiorderVariableController extends VariableController {
 	@Override
 	public List<Variable> setupVariables(Map<Object, Object> parameters, double k) {
 		List<Variable> orders = this.setupOrders(parameters);
+		List<Task> tasks = this.setupOrdersTasks(parameters);
 		Map<String, List<? extends Resource>> resources = this.setupResources(parameters);
+		tasks = this.getUsefulResource(tasks, resources, parameters);
+
+		for (Variable order: orders) {
+			order.setValue(tasks);
+		}
 		orders = this.assignResources(orders, resources, k);
 
 		return orders;
@@ -30,11 +37,7 @@ public class FixedMultiorderVariableController extends VariableController {
 
 	protected List<Variable> setupOrders(Map<Object, Object> parameters) {
 		List<Variable> orders = (List<Variable>) parameters.get("orders");
-		List<Task> tasks = setupOrdersTasks(parameters);
 
-		for (Variable order: orders) {
-			order.setValue(tasks);
-		}
 		return orders;
 	}
 
@@ -117,7 +120,6 @@ public class FixedMultiorderVariableController extends VariableController {
 			HumanResource resource = HumanResource.builder()
 					.id(i)
 					.cost(costs[i])
-					.status(STATUS.NOT_USEFUL)
 					.usedTimeSlots(new ArrayList<>())
 					.build();
 			List<Skill> skills = new ArrayList<>();
@@ -154,6 +156,62 @@ public class FixedMultiorderVariableController extends VariableController {
 	}
 
 	protected List<Variable> assignResources(List<Variable> orders, Map<String, List<? extends Resource>> resources, double k) {
+		// TODO
 		return orders;
+	}
+
+	private List<Task> getUsefulResource(List<Task> tasks, Map<String, List<? extends Resource>> resources, Map<Object, Object> parameters) {
+		int numberOfHumanResources = (int) parameters.get("numberOfHumanResources");
+		double[][] usefulHumanResourcesMap = getUsefulHumaResourcesMap(parameters);
+
+		int numberOfMachineResources = (int) parameters.get("numberOfMachineResources");
+		double[] machineCosts = (double[]) parameters.get("machineCosts");
+
+		List<HumanResource> hResources = (List<HumanResource>) resources.get("humanResources");
+		List<MachineResource> mResources = (List<MachineResource>) resources.get("machineResources");
+		for (Task task: tasks) {
+			List<HumanResource> humanResources = new ArrayList<>();
+			for (int i = 0; i < numberOfHumanResources; i++) {
+				if (usefulHumanResourcesMap[task.getId()][i] == 1) {
+					HumanResource humanResource = new HumanResource();
+					ObjectUtil.copyProperties(hResources.get(i), humanResource);
+				}
+			}
+		}
+		return tasks;
+	}
+
+	private double[][] getUsefulHumaResourcesMap(Map<Object, Object> parameters) {
+		int[][] treq = (int[][]) parameters.get("treq");
+		double [][] lexp = (double [][]) parameters.get("lexp");
+		int numberOfHumanResources = (int) parameters.get("numberOfHumanResources");
+		int numberOfSkills = (int) parameters.get("numberOfSkills");
+		int numberOfTasks = (int) parameters.get("numberOfTasks");
+
+		final int SKILL_IS_USED = 1;
+		final int RESOURCE_IS_USEFUL = 1;
+		final int RESOURCE_IS_NOT_USEFUL = 0;
+
+		double [][] usefulHumanResourcesMap = new double[numberOfTasks][numberOfHumanResources];
+
+		for (int task = 0; task < numberOfTasks; task++) {
+			for (int resource = 0; resource < numberOfHumanResources; resource++) {
+				boolean isUseful = true;
+				for (int skill = 0; skill < numberOfSkills; skill++) {
+					if (treq[task][skill] == SKILL_IS_USED) {
+						if (treq[task][skill] + lexp[resource][skill] == SKILL_IS_USED) {
+							isUseful = false;
+							break;
+						}
+					}
+				}
+				if (isUseful == true) {
+					usefulHumanResourcesMap[task][resource] = RESOURCE_IS_USEFUL;
+				} else {
+					usefulHumanResourcesMap[task][resource] = RESOURCE_IS_NOT_USEFUL;
+				}
+			}
+		}
+		return usefulHumanResourcesMap;
 	}
 }
