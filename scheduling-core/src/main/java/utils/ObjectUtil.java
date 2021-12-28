@@ -5,6 +5,7 @@ import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import variable.component.resource.Resource;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -95,4 +96,5 @@ public class ObjectUtil {
 		String[] results = new String[emptyNames.size()];
 		return (String[]) emptyNames.toArray(results);
 	}
+
 }

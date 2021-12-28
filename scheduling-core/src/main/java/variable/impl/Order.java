@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -72,5 +75,34 @@ public class Order implements Variable{
 		}
 
 		return stringBuilder.toString();
+	}
+
+	/**
+	 * Calculate the possible start time of a task based on its predecessors' end time.
+	 * Max end time is the scheduled start time
+	 * @param task
+	 * @return
+	 */
+	public LocalDateTime calculateTaskScheduledStartTime(Task task) {
+
+		// Step 1: Get list of predecessors ID
+		List<Integer> predecessorsIds = task.getPredecessors();
+
+		if (predecessorsIds.isEmpty()) {
+			return null;
+		}
+		LocalDateTime scheduledStartTime = LocalDateTime.now();
+		List<Task> predecessors = this.tasks.stream()
+				.filter(predecessorTask -> predecessorsIds.contains(predecessorTask.getId()))
+				.collect(Collectors.toList());
+
+		List<LocalDateTime> dateTimes = predecessors.stream()
+				.map(predecessor -> predecessor.getEndTime())
+				.collect(Collectors.toList());
+		Collections.sort(dateTimes);
+
+		// Get max date time end
+		scheduledStartTime = dateTimes.get(dateTimes.size() - 1);
+		return scheduledStartTime;
 	}
 }

@@ -25,6 +25,7 @@ public class FixedMultiorderVariableController extends VariableController {
 		for (Variable order: orders) {
 			order.setValue(tasks);
 		}
+		Collections.sort(orders);
 		orders = this.assignResources(orders, resources, k);
 
 		return orders;
