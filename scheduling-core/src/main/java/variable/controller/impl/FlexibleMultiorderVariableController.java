@@ -19,10 +19,17 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 
 	ResourceManager resourceManager;
 
-	FlexibleMultiorderVariableController() {
+	public FlexibleMultiorderVariableController() {
 		this.resourceManager = new ResourceManager();
 	}
 
+	/**
+	 * Assign resources to all orders.
+	 * @param orders
+	 * @param resources
+	 * @param k
+	 * @return
+	 */
 	@Override
 	protected List<Variable> assignResources(List<Variable> orders, Map<String, List<? extends Resource>> resources, double k) {
 		this.resourceManager.setResourcesMap(resources);
