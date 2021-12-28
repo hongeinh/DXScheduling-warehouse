@@ -41,7 +41,6 @@ public class ResourceManager {
 	 * @return
 	 */
 	public <T extends Resource> T getAvailableResource(List<T> requiredResources, LocalDateTime time) {
-		//TODO
 		List<T> availableResources = new ArrayList<>();
 		List<T> possibleResourceList = null;
 		for (Map.Entry<String, List<? extends Resource>> entry : resourcesMap.entrySet()) {
@@ -121,7 +120,7 @@ public class ResourceManager {
 			if (resource.getId() == requiredResource.getId()) {
 				List<TimeSlot> timeSlots = resource.getUsedTimeSlots();
 
-				if (timeSlots.isEmpty()) {
+				if (timeSlots == null || timeSlots.isEmpty()) {
 					return true;
 				}
 

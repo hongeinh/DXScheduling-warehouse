@@ -16,7 +16,7 @@ public class TSRAScenario {
 
 	public static final double[] orderPenaltyRate = {30, 60, 50};
 
-	public static final double[] durations = {1, 1, 2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 2, 1, 3, 2, 3, 2, 3};
+	public static final long[] durations = {1, 1, 2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 2, 1, 3, 2, 3, 2, 3};
 
 	public static final double[] scheduledTimes = {0, 1, 2, 4, 7, 9, 9, 11, 13, 12, 15, 17, 19, 22, 23, 26, 28, 28, 31};
 

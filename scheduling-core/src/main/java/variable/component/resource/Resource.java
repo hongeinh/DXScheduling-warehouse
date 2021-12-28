@@ -6,20 +6,20 @@ import lombok.*;
 import variable.component.timeslot.TimeSlot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Resource implements Serializable {
 
 	public static int resourceId = 0;
 	protected int id;
 	protected STATUS status;
-	protected TYPE type;
+	protected TYPE type = TYPE.DEFAULT;
 	protected double cost;
 	protected List<TimeSlot> usedTimeSlots;
 

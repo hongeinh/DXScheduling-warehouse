@@ -7,6 +7,7 @@ import variable.component.resource.Resource;
 import variable.component.skill.Skill;
 import variable.component.timeslot.TimeSlot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,8 +18,9 @@ public class HumanResource extends Resource{
 	private List<Skill> skills;
 
 	@Builder
-	public HumanResource(int id, STATUS status, double cost, List<TimeSlot> usedTimeSlots, List<Skill> skills) {
-		super(id, status, cost, usedTimeSlots);
+	public HumanResource(int id, STATUS status, double cost, List<TimeSlot> usedTimeSlots, TYPE type, List<Skill> skills) {
+		super(id, status, TYPE.HUMAN, cost, usedTimeSlots);
+		this.usedTimeSlots = new ArrayList<>();
 		this.skills = skills;
 	}
 

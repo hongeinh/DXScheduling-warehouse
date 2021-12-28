@@ -56,7 +56,7 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 
 				// Check HumanResource va Machine resource cai nao co sau thi start time theo cai do
 				scheduledStartTime = hResourceStart.isBefore(mResourceStart) ? hResourceStart : mResourceStart;
-				LocalDateTime endTime = scheduledStartTime.plus((long) task.getDuration(), ChronoUnit.HOURS);
+				LocalDateTime endTime = scheduledStartTime.plus(task.getDuration(), ChronoUnit.HOURS);
 
 				// Set thoi gian cho task
 				task.setStartTime(scheduledStartTime);

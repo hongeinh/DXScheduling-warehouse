@@ -2,6 +2,7 @@ package variable.controller.impl;
 
 import common.STATUS;
 import representation.Solution;
+import utils.DataUtil;
 import utils.ObjectUtil;
 import variable.Variable;
 import variable.component.resource.Resource;
@@ -52,21 +53,21 @@ public class FixedMultiorderVariableController extends VariableController {
 			Map<String, Object> params = new HashMap<>();
 
 //			double scheduledTime = ((double[]) parameters.get("scheduledTimes"))[i];
-			double duration = ((double[]) parameters.get("durations"))[i];
+			long duration = ((long[]) parameters.get("durations"))[i];
 			params.put("id", i);
 			params.put("duration", duration);
 			params.put("scheduledTime", this.getNow());
 
 			Task task = Task.builder()
-//					.id(i)
-//					.duration(duration)
-//					.scheduledStartTime(this.getNow())
+					.id(i)
+					.duration(duration)
+					.scheduledStartTime(this.getNow())
 					.descendants(new ArrayList<>())
 					.predecessors(new ArrayList<>())
 					.requiredHumanResources(new ArrayList<>())
 					.requiredMachinesResources(new ArrayList<>())
 					.build();
-			task.setTaskAttributes(params);
+//			task.setTaskAttributes(params);
 			tasks.add(task);
 		}
 
@@ -162,22 +163,40 @@ public class FixedMultiorderVariableController extends VariableController {
 	}
 
 	private List<Task> getUsefulResource(List<Task> tasks, Map<String, List<? extends Resource>> resources, Map<Object, Object> parameters) {
+		// TODO: implement chua hoan thien
 		int numberOfHumanResources = (int) parameters.get("numberOfHumanResources");
 		double[][] usefulHumanResourcesMap = getUsefulHumaResourcesMap(parameters);
+		double[][] usefulMachineResourceMap = (double [][]) parameters.get("mreq");
 
 		int numberOfMachineResources = (int) parameters.get("numberOfMachineResources");
 		double[] machineCosts = (double[]) parameters.get("machineCosts");
 
 		List<HumanResource> hResources = (List<HumanResource>) resources.get("humanResources");
 		List<MachineResource> mResources = (List<MachineResource>) resources.get("machineResources");
+
 		for (Task task: tasks) {
 			List<HumanResource> humanResources = new ArrayList<>();
+			List<MachineResource> machineResources = new ArrayList<>();
+
+			// Get useful human resource
 			for (int i = 0; i < numberOfHumanResources; i++) {
 				if (usefulHumanResourcesMap[task.getId()][i] == 1) {
-					HumanResource humanResource = new HumanResource();
-					ObjectUtil.copyProperties(hResources.get(i), humanResource);
+					HumanResource humanResource = DataUtil.cloneBean(hResources.get(i));
+					humanResources.add(humanResource);
 				}
 			}
+
+			// Get useful machine resource
+			for (int i = 0; i < numberOfMachineResources; i++) {
+				if (usefulMachineResourceMap[task.getId()][i] == 1) {
+					MachineResource machineResourceResource = DataUtil.cloneBean(mResources.get(i));
+					machineResources.add(machineResourceResource);
+				}
+			}
+
+			task.setRequiredHumanResources(humanResources);
+			task.setRequiredMachinesResources(machineResources);
+
 		}
 		return tasks;
 	}

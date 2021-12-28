@@ -24,7 +24,7 @@ public class Task implements Comparable<Task>, Serializable {
 	private LocalDateTime scheduledStartTime;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
-	private double duration;
+	private long duration;
 	private double idle;
 	private double priority;
 	private List<Integer> predecessors;
