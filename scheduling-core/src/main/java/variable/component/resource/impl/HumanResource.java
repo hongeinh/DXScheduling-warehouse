@@ -1,6 +1,7 @@
 package variable.component.resource.impl;
 
 import common.STATUS;
+import common.TYPE;
 import lombok.*;
 import variable.component.resource.Resource;
 import variable.component.skill.Skill;

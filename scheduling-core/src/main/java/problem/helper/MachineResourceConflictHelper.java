@@ -2,10 +2,10 @@ package problem.helper;
 
 
 import common.STATUS;
-import component.resource.MachineResource;
-import component.resource.Resource;
-import component.variable.Variable;
-import component.variable.impl.Task;
+import variable.component.resource.impl.MachineResource;
+import variable.component.resource.Resource;
+import variable.Variable;
+import variable.impl.Task;
 import representation.Solution;
 
 import java.util.List;
@@ -70,29 +70,29 @@ public class MachineResourceConflictHelper extends ResourceConflictHelper {
 
     @Override
     public boolean isResourceConflict(Task var1, Task var2, int resourceId) {
-        Resource resource1 = isResourceUsefulToTask(var1, resourceId);
-        Resource resource2 = isResourceUsefulToTask(var2, resourceId);
-        if (resource1 != null && resource2 != null) {
-            if (resource1.getStatus() == resource2.getStatus() && resource1.getStatus() == STATUS.ASSIGNED) {
-                double start1 = ((Task) var1).getStart(); double end1 = ((Task) var1).getDuration() + start1;
-                double start2 = var2.getStart(); double end2 = var2.getDuration() + start2;
-                if(start1 == start2) {
-                    if(end1 <= end2 || end2 <= end1 ) {
-                        return true;
-                    }
-                } else if (start1 < start2) {
-                    if (start2 < end1) {
-                        if(end1 <= end2 || end2 <= end1)
-                            return true;
-                    }
-                } else if (start2 < start1) {
-                    if (start1 < end2) {
-                        if (end1 <= end2 || end2 <= end1)
-                            return true;
-                    }
-                }
-            }
-        }
+//        Resource resource1 = isResourceUsefulToTask(var1, resourceId);
+//        Resource resource2 = isResourceUsefulToTask(var2, resourceId);
+//        if (resource1 != null && resource2 != null) {
+//            if (resource1.getStatus() == resource2.getStatus() && resource1.getStatus() == STATUS.ASSIGNED) {
+//                double start1 = ((Task) var1).getStart(); double end1 = ((Task) var1).getDuration() + start1;
+//                double start2 = var2.getStart(); double end2 = var2.getDuration() + start2;
+//                if(start1 == start2) {
+//                    if(end1 <= end2 || end2 <= end1 ) {
+//                        return true;
+//                    }
+//                } else if (start1 < start2) {
+//                    if (start2 < end1) {
+//                        if(end1 <= end2 || end2 <= end1)
+//                            return true;
+//                    }
+//                } else if (start2 < start1) {
+//                    if (start1 < end2) {
+//                        if (end1 <= end2 || end2 <= end1)
+//                            return true;
+//                    }
+//                }
+//            }
+//        }
         return false;
     }
 
