@@ -188,7 +188,7 @@ public class MultiorderTaskSchedulingProblem extends TaskSchedulingResourceAlloc
 	@Override
 	public double[] evaluateConstraints(Solution solution) {
 		double[] constraints = new double[2];
-		constraints[0] = evaluateResourceContraints(solution);
+//		constraints[0] = evaluateResourceContraints(solution);
 		constraints[1] = evaluateTimeConstraints(solution);
 		return constraints;
 	}

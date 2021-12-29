@@ -13,24 +13,24 @@ public class HumanResourceConflictHelper extends ResourceConflictHelper {
     @Override
     public double evaluateResourceConflict(Solution solution, int numberOfResource) {
         double assignment = 0;
-//        List<Variable> variables = solution.getVariables();
-//        List<Task> tasks = joinOrders(variables);
-//
-//        for (int i = 0; i < numberOfResource; i++) {
-//            double resourceAssignmentCount = countResourceAssignedTimes(tasks, i);
-//            double rjAssignment;
-//            if (resourceAssignmentCount > 0) {
-//                rjAssignment = countResourceConflict(tasks, i)/resourceAssignmentCount;
-//                assignment += rjAssignment;
-//            }
-//        }
+        List<Variable> variables = solution.getVariables();
+        List<Task> tasks = joinOrders(variables);
+
+        for (int i = 0; i < numberOfResource; i++) {
+            double resourceAssignmentCount = countResourceAssignedTimes(tasks, i);
+            double rjAssignment;
+            if (resourceAssignmentCount > 0) {
+                rjAssignment = countResourceConflict(tasks, i)/resourceAssignmentCount;
+                assignment += rjAssignment;
+            }
+        }
         return assignment/numberOfResource;
     }
 
     @Override
-    public double countResourceAssignedTimes(List<Task> variables, int resourceId) {
+    public double countResourceAssignedTimes(List<Task> tasks, int resourceId) {
         double count = 0;
-        for (Task variable: variables) {
+        for (Task variable: tasks) {
             if (variable.getRequiredHumanResources().get(resourceId).getStatus() == STATUS.ASSIGNED)
                 count++;
         }

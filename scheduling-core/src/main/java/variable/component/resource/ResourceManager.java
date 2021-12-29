@@ -41,8 +41,11 @@ public class ResourceManager {
 	 * @return
 	 */
 	public <T extends Resource> T getAvailableResource(List<T> requiredResources, LocalDateTime time) {
+		if (requiredResources.isEmpty()) {
+			return null;
+		}
 		List<T> availableResources = new ArrayList<>();
-		List<T> possibleResourceList = null;
+		List<T> possibleResourceList = new ArrayList<>();
 		for (Map.Entry<String, List<? extends Resource>> entry : resourcesMap.entrySet()) {
 			List<? extends Resource> resourceList = entry.getValue();
 
@@ -52,11 +55,13 @@ public class ResourceManager {
 					if (isResourceAvailable(resource, resourceList, time)) {
 						availableResources.add(resource);
 					} else {
-						List<TimeSlot> timeSlots = resource.getUsedTimeSlots();
-						Collections.sort(timeSlots);
+						possibleResourceList.add((T) resourceList.get(resource.getId()));
+//
+//						List<TimeSlot> timeSlots = resource.getUsedTimeSlots();
+//						Collections.sort(timeSlots);
 					}
 				}
-				ObjectUtil.copyProperties(resourceList, possibleResourceList);
+				// ObjectUtil.copyProperties(resourceList, possibleResourceList);
 				// finish when done
 				break;
 			} else {
@@ -85,7 +90,7 @@ public class ResourceManager {
 		T returnResource = DataUtil.cloneBean(randomResource);
 		List<TimeSlot> randomResourceTimeSlot = randomResource.getUsedTimeSlots();
 		returnResource.getUsedTimeSlots().clear();
-		returnResource.getUsedTimeSlots().add(new TimeSlot(randomResourceTimeSlot.get(randomResourceTimeSlot.size() - 1).getStartDateTime(), null));
+		returnResource.getUsedTimeSlots().add(new TimeSlot(randomResourceTimeSlot.get(randomResourceTimeSlot.size() - 1).getEndDateTime(), null));
 		return returnResource;
 	}
 

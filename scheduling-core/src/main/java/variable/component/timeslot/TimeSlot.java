@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeSlot implements Comparable<TimeSlot> {
+public class TimeSlot implements Comparable<TimeSlot>, Serializable {
 
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;

@@ -19,13 +19,8 @@ public class DataUtil {
 		ByteArrayOutputStream baos = null;
 		T deepCopy = null;
 		try {
-
-
 			baos = new ByteArrayOutputStream();
-
-
 			oos = new ObjectOutputStream(baos);
-
 			oos.writeObject(source);
 			bais = new ByteArrayInputStream(baos.toByteArray());
 			ois = new ObjectInputStream(bais);
@@ -41,7 +36,6 @@ public class DataUtil {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-
 			}
 			if (oos != null) {
 				try {
@@ -69,12 +63,12 @@ public class DataUtil {
 		return deepCopy;
 	}
 
-	public static boolean nullOrEmpty(Collection objects) {
-		return objects == null || objects.isEmpty();
-	}
-
 	public static boolean nonNullOrEmpty(Collection objects) {
 		return !nullOrEmpty(objects);
+	}
+
+	public static boolean nullOrEmpty(Collection objects) {
+		return objects == null || objects.isEmpty();
 	}
 
 

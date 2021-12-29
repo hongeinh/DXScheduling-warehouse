@@ -6,6 +6,8 @@ import representation.Solution;
 import variable.Variable;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import java.util.Map;
 @Setter
 public abstract class VariableController {
 
-	protected LocalDateTime now = LocalDateTime.now();
+	protected LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
 	public abstract List<Variable> setupVariables(Map<Object, Object> parameters, double k);
 

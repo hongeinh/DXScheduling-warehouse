@@ -25,6 +25,7 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 
 	/**
 	 * Assign resources to all orders.
+	 *
 	 * @param orders
 	 * @param resources
 	 * @param k
@@ -51,28 +52,39 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 				HumanResource humanResource = resourceManager.getAvailableResource(task.getRequiredHumanResources(), scheduledStartTime);
 				MachineResource machineResource = resourceManager.getAvailableResource(task.getRequiredMachinesResources(), scheduledStartTime);
 
-				LocalDateTime hResourceStart = humanResource.getUsedTimeSlots().get(0).getStartDateTime();
-				LocalDateTime mResourceStart = humanResource.getUsedTimeSlots().get(0).getStartDateTime();
+				LocalDateTime hResourceStart = (humanResource != null) ? humanResource.getUsedTimeSlots().get(0).getStartDateTime() : scheduledStartTime;
+				LocalDateTime mResourceStart = (machineResource != null) ? machineResource.getUsedTimeSlots().get(0).getStartDateTime() : scheduledStartTime;
+				scheduledStartTime = hResourceStart.isBefore(mResourceStart) ? hResourceStart : mResourceStart;
+
 
 				// Check HumanResource va Machine resource cai nao co sau thi start time theo cai do
-				scheduledStartTime = hResourceStart.isBefore(mResourceStart) ? hResourceStart : mResourceStart;
+
 				LocalDateTime endTime = scheduledStartTime.plus(task.getDuration(), ChronoUnit.HOURS);
 
 				// Set thoi gian cho task
 				task.setStartTime(scheduledStartTime);
 				task.setEndTime(endTime);
 
-				// Set lai thoi gian cho resource
-				humanResource.getUsedTimeSlots().clear(); machineResource.getUsedTimeSlots().clear();
 				TimeSlot timeSlot = new TimeSlot(scheduledStartTime, endTime);
-				humanResource.getUsedTimeSlots().add(timeSlot); humanResource.setStatus(STATUS.USEFUL);
-				machineResource.getUsedTimeSlots().add(timeSlot);machineResource.setStatus(STATUS.USEFUL);
 
-				task.getRequiredHumanResources().clear();task.getRequiredMachinesResources().clear();
-				task.getRequiredHumanResources().add(humanResource); task.getRequiredMachinesResources().add(machineResource);
+				// Set lai thoi gian cho resource
+				if(humanResource != null) {
+					humanResource.getUsedTimeSlots().clear();
+					humanResource.getUsedTimeSlots().add(timeSlot);
+					humanResource.setStatus(STATUS.ASSIGNED);
+					task.getRequiredHumanResources().clear();
+					task.getRequiredHumanResources().add(humanResource);
+					this.resourceManager.addTimeSlot(humanResource);
+				} else if (machineResource != null ) {
+					machineResource.getUsedTimeSlots().clear();
+					machineResource.getUsedTimeSlots().add(timeSlot);
+					machineResource.setStatus(STATUS.ASSIGNED);
 
-				this.resourceManager.addTimeSlot(humanResource);
-				this.resourceManager.addTimeSlot(machineResource);
+					task.getRequiredMachinesResources().clear();
+					task.getRequiredMachinesResources().add(machineResource);
+
+					this.resourceManager.addTimeSlot(machineResource);
+				}
 
 			}
 		}
