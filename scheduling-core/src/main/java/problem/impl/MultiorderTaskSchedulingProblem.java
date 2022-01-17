@@ -47,8 +47,9 @@ public class MultiorderTaskSchedulingProblem extends TaskSchedulingResourceAlloc
 	@Override
 	public Solution evaluate(Solution solution) {
 		solution = evaluateIdleDuration(solution);
-		solution = evaluateQuality(solution);
+//		solution = evaluateQuality(solution);
 		solution = evaluateTotalCost(solution);
+		solution = evaluateWorkBalance(solution);
 		return solution;
 	}
 
@@ -184,6 +185,41 @@ public class MultiorderTaskSchedulingProblem extends TaskSchedulingResourceAlloc
 		return solution;
 	}
 
+
+	/**
+	 * This function evaluates the the work balance of staffs in a solution based on the longest order's completion time.
+	 * The work balance of each solution is the average work time of staff / total work time
+	 * @param solution	The Solution to be evaluated
+	 *
+	 *
+	 * */
+	private Solution evaluateWorkBalance(Solution solution) {
+		List<Variable> variables = solution.getVariables();
+		LocalDateTime earliestStartTime = ((Order) variables.get(0)).getStartTime();
+		LocalDateTime latestEndTime = this.getSolutionLatestEndTime(variables, earliestStartTime);
+		double elapsedTime = ChronoUnit.HOURS.between(earliestStartTime, latestEndTime);
+
+		double averageWorkingTime = getResourcesAverageWorkingTime(variables);
+
+		solution.getObjectives()[1] = averageWorkingTime/elapsedTime;
+		return solution;
+
+	}
+
+	private double getResourcesAverageWorkingTime(List<Variable> variables) {
+		// TODO
+		return 0;
+	}
+
+	private LocalDateTime getSolutionLatestEndTime(List<Variable> variables, LocalDateTime earliestStartDate) {
+		LocalDateTime maxEndTime = earliestStartDate;
+		for (Variable variable: variables) {
+			if (maxEndTime.isBefore(((Order) variable).getEndTime())) {
+				maxEndTime = ((Order) variable).getEndTime();
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public double[] evaluateConstraints(Solution solution) {

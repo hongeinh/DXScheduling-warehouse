@@ -35,11 +35,11 @@ public class Task implements Comparable<Task>, Serializable {
 
 
 	private String getAssignedResourceIdsString(List<? extends Resource> resources, String delimeter) {
-		List<String> humanResourceIds = resources.stream()
+		List<String> resourcesId = resources.stream()
 				.filter(resource -> resource.getStatus() == STATUS.ASSIGNED)
 				.map(resource -> Integer.toString(resource.getId()))
 				.collect(Collectors.toList());
-		return humanResourceIds.stream().map(String::valueOf).collect(Collectors.joining(delimeter));
+		return resourcesId.stream().map(String::valueOf).collect(Collectors.joining(delimeter));
 	}
 
 	public String toString() {

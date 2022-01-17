@@ -1,13 +1,18 @@
 package variable.impl;
 
+import utils.DataUtil;
 import variable.Variable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import variable.component.resource.impl.HumanResource;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -23,6 +28,7 @@ public class Order implements Variable{
 	private double totalTimeAllowed;
 	private double totalTimeSpent;
 	private double totalCost;
+
 	List<Task> tasks;
 
 	@Override
@@ -104,5 +110,50 @@ public class Order implements Variable{
 		// Get max date time end
 		scheduledStartTime = dateTimes.get(dateTimes.size() - 1);
 		return scheduledStartTime;
+	}
+
+	public LocalDateTime getStartTime() {
+		LocalDateTime startTime = this.tasks.get(0).getStartTime();
+		return startTime;
+	}
+
+	public LocalDateTime getEndTime() {
+		LocalDateTime maxEndTime = this.getStartTime();
+		for (Task task: this.tasks) {
+			if (maxEndTime.isBefore(task.getEndTime())) {
+				maxEndTime = task.getEndTime();
+			}
+		}
+
+		return maxEndTime;
+	}
+
+
+	public long getElapsedTimeInUnit(ChronoUnit unit) {
+		long elapsedTime = unit.between(this.getStartTime(), this.getEndTime());
+
+		return elapsedTime;
+	}
+
+	public Map<HumanResource, Long> getHumanResourcesWorkingTime (ChronoUnit unit) {
+		// TODO
+		List<HumanResource> resources = new ArrayList<>();
+		List<Integer> resourceIds = new ArrayList<>();
+
+		for (Task task: this.tasks) {
+			List<HumanResource> taskHumanResources = task.getRequiredHumanResources();
+			for (HumanResource humanResource: taskHumanResources) {
+				if (!resourceIds.contains(humanResource.getId())) {
+					resourceIds.add(humanResource.getId());
+					resources.add(DataUtil.cloneBean(humanResource));
+				} else {
+					resources.get(humanResource.getId())
+							.addTimeSlots(humanResource.getUsedTimeSlots());
+				}
+			}
+		}
+
+
+		return null;
 	}
 }

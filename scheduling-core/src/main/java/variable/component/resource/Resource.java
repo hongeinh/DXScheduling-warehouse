@@ -23,8 +23,8 @@ public class Resource implements Serializable {
 	protected double cost;
 	protected List<TimeSlot> usedTimeSlots;
 
-	public List<TimeSlot> addTimeSlot(TimeSlot timeSlot) {
-		usedTimeSlots.add(timeSlot);
+	public List<TimeSlot> addTimeSlots(List<TimeSlot> timeSlots) {
+		usedTimeSlots.addAll(timeSlots);
 		Collections.sort(usedTimeSlots);
 		return usedTimeSlots;
 	}
