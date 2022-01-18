@@ -3,10 +3,10 @@ package variable.component.resource;
 import lombok.Getter;
 import lombok.Setter;
 import utils.DataUtil;
-import utils.ObjectUtil;
+import utils.NumberUtil;
+import utils.TimeUtils;
 import variable.component.timeslot.TimeSlot;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -41,6 +41,7 @@ public class ResourceManager {
 	 * @return
 	 */
 	public <T extends Resource> T getAvailableResource(List<T> requiredResources, LocalDateTime time) {
+		// TODO
 		if (requiredResources.isEmpty()) {
 			return null;
 		}
@@ -55,14 +56,9 @@ public class ResourceManager {
 					if (isResourceAvailable(resource, resourceList, time)) {
 						availableResources.add(resource);
 					} else {
-						possibleResourceList.add((T) resourceList.get(resource.getId()));
-//
-//						List<TimeSlot> timeSlots = resource.getUsedTimeSlots();
-//						Collections.sort(timeSlots);
+						possibleResourceList.add((T) resourceList.get(resource.getId()));;
 					}
 				}
-				// ObjectUtil.copyProperties(resourceList, possibleResourceList);
-				// finish when done
 				break;
 			} else {
 				continue;
@@ -71,7 +67,9 @@ public class ResourceManager {
 
 		T availableResource = chooseRandomAvailableResource(availableResources);
 		if (availableResource != null) {
-			availableResource.getUsedTimeSlots().add(new TimeSlot(time, null));
+			TimeSlot timeSlot = new TimeSlot(time, null);
+			timeSlot = TimeUtils.getValidTimeSlot(timeSlot);
+			availableResource.getUsedTimeSlots().add(timeSlot);
 		} else {
 			availableResource = calculateNextAvailableResource(possibleResourceList);
 		}
@@ -85,12 +83,13 @@ public class ResourceManager {
 	 * @return
 	 */
 	private <T extends Resource> T calculateNextAvailableResource(List<T> resourceList) {
-		Random rand = new Random();
-		T randomResource = resourceList.get(rand.nextInt(resourceList.size()));
+		int rand = NumberUtil.getRandomIntNumber(0, resourceList.size() - 1);
+		T randomResource = resourceList.get(rand);
 		T returnResource = DataUtil.cloneBean(randomResource);
 		List<TimeSlot> randomResourceTimeSlot = randomResource.getUsedTimeSlots();
 		returnResource.getUsedTimeSlots().clear();
-		returnResource.getUsedTimeSlots().add(new TimeSlot(randomResourceTimeSlot.get(randomResourceTimeSlot.size() - 1).getEndDateTime(), null));
+		TimeSlot availableTimeSlot = new TimeSlot(randomResourceTimeSlot.get(randomResourceTimeSlot.size() - 1).getEndDateTime(), null);
+		returnResource.getUsedTimeSlots().add(availableTimeSlot);
 		return returnResource;
 	}
 
@@ -105,8 +104,8 @@ public class ResourceManager {
 		if (availableResources.isEmpty()) {
 			return null;
 		} else {
-			Random rand = new Random();
-			T randomResource = availableResources.get(rand.nextInt(availableResources.size()));
+			int rand = NumberUtil.getRandomIntNumber(0, availableResources.size() - 1);
+			T randomResource = availableResources.get(rand);
 			return DataUtil.cloneBean(randomResource);
 		}
 	}
@@ -129,8 +128,9 @@ public class ResourceManager {
 					return true;
 				}
 
-				LocalDateTime lastEndTime = timeSlots.get(timeSlots.size() - 1).getEndDateTime();
-				if (lastEndTime.isBefore(time) || lastEndTime.isEqual(time)) {
+				LocalDateTime lastEndTime = (!timeSlots.isEmpty()) ?
+						timeSlots.get(timeSlots.size() - 1).getEndDateTime() : null ;
+				if (lastEndTime == null || lastEndTime.isBefore(time) || lastEndTime.isEqual(time)) {
 					return true;
 				}
 			} else {
@@ -161,6 +161,7 @@ public class ResourceManager {
 						break;
 					}
 				}
+				break;
 			} else {
 				continue;
 			}
@@ -170,4 +171,6 @@ public class ResourceManager {
 			System.out.println("No resource found to add time slot");
 		}
 	}
+
+
 }

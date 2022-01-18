@@ -1,6 +1,7 @@
 package variable.controller.impl;
 
 import common.STATUS;
+import utils.TimeUtils;
 import variable.Variable;
 import variable.component.resource.Resource;
 import variable.component.resource.ResourceManager;
@@ -61,12 +62,10 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 
 				LocalDateTime endTime = scheduledStartTime.plus(task.getDuration(), ChronoUnit.HOURS);
 
+				TimeSlot timeSlot = TimeUtils.getValidTimeSlot(new TimeSlot(scheduledStartTime, endTime));
 				// Set thoi gian cho task
-				task.setStartTime(scheduledStartTime);
-				task.setEndTime(endTime);
-
-				TimeSlot timeSlot = new TimeSlot(scheduledStartTime, endTime);
-
+				task.setStartTime(timeSlot.getStartDateTime());
+				task.setEndTime(timeSlot.getEndDateTime());
 				// Set lai thoi gian cho resource
 				if(humanResource != null) {
 					humanResource.getUsedTimeSlots().clear();
@@ -74,6 +73,7 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 					humanResource.setStatus(STATUS.ASSIGNED);
 					task.getRequiredHumanResources().clear();
 					task.getRequiredHumanResources().add(humanResource);
+					humanResource.getUsedTimeSlots().add(timeSlot);
 					this.resourceManager.addTimeSlot(humanResource);
 				} else if (machineResource != null ) {
 					machineResource.getUsedTimeSlots().clear();
@@ -83,6 +83,7 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 					task.getRequiredMachinesResources().clear();
 					task.getRequiredMachinesResources().add(machineResource);
 
+					machineResource.getUsedTimeSlots().add(timeSlot);
 					this.resourceManager.addTimeSlot(machineResource);
 				}
 
@@ -91,4 +92,6 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 
 		return orders;
 	}
+
+
 }

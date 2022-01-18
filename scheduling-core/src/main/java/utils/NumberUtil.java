@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class NumberUtil {
 	public static int getRandomIntNumber(int min, int max) {
-		return ThreadLocalRandom.current().nextInt(min, max);
+		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 
 	public static double floor2DecimalPoints(double num) {

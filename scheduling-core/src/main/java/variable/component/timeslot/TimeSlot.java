@@ -20,6 +20,9 @@ public class TimeSlot implements Comparable<TimeSlot>, Serializable {
 
 	@Override
 	public int compareTo(TimeSlot o) {
+		if (o == null) {
+			return 1;
+		}
 		if (this.startDateTime.isBefore(o.getStartDateTime()) ||
 				(this.startDateTime.isEqual(o.getStartDateTime()) && this.endDateTime.isBefore(o.getEndDateTime()))) {
 			return 1;

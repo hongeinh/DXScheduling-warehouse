@@ -1,5 +1,7 @@
 package utils;
 
+import variable.component.timeslot.TimeSlot;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -33,6 +35,38 @@ public class TimeUtils {
 //		LocalDateTime second = LocalDateTime.of(2021, 07, 31, 10, 22);
 //		System.out.println((first, second));
 //	}
+
+	public static TimeSlot getValidTimeSlot(TimeSlot timeSlot) {
+		if (isTimeSlotValid(timeSlot)) {
+			return timeSlot;
+		} else {
+			LocalDateTime nextDay = timeSlot.getStartDateTime().plusDays(1);
+			nextDay = nextDay.withHour(8).withMinute(0).withSecond(0);
+			if (timeSlot.getEndDateTime() == null){
+				return new TimeSlot(nextDay, null);
+			} else {
+				long elapsed = ChronoUnit.HOURS.between(timeSlot.getStartDateTime(), timeSlot.getEndDateTime());
+				return new TimeSlot(nextDay, nextDay.plusHours(elapsed));
+			}
+		}
+	}
+
+	public static boolean isTimeSlotValid(TimeSlot timeSlot) {
+		int startDateHour = timeSlot.getStartDateTime().getHour();
+
+
+		if (startDateHour >= 8 && startDateHour <= 17) {
+			if (timeSlot.getEndDateTime() != null) {
+				int endDateHour = timeSlot.getEndDateTime().getHour();
+				return endDateHour >= 8 && endDateHour <= 17;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
 }
 
 
