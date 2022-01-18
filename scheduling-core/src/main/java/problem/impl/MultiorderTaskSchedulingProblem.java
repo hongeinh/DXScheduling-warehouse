@@ -13,6 +13,7 @@ import utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -201,14 +202,36 @@ public class MultiorderTaskSchedulingProblem extends TaskSchedulingResourceAlloc
 
 		double averageWorkingTime = getResourcesAverageWorkingTime(variables);
 
-		solution.getObjectives()[1] = averageWorkingTime/elapsedTime;
+//		solution.getObjectives()[1] = averageWorkingTime/elapsedTime;
+		// the longer the working time, the smaller the objective -> goal
+		solution.getObjectives()[1] = elapsedTime/averageWorkingTime;
 		return solution;
 
 	}
 
 	private double getResourcesAverageWorkingTime(List<Variable> variables) {
-		// TODO
-		return 0;
+		int resourceCount = 0;
+		Map<Integer, Long> resourceWorkingTime = new HashMap<>();
+
+		// Get the total working time of each resource for all variables
+		for (Variable variable: variables) {
+			Map<Integer, Long> workingTime = ((Order) variable).getHumanResourcesWorkingTime(ChronoUnit.HOURS);
+			if (resourceWorkingTime.isEmpty()) {
+				resourceWorkingTime.putAll(workingTime);
+			} else {
+				for (Map.Entry<Integer, Long> entry: workingTime.entrySet()) {
+					long time = resourceWorkingTime.get(entry.getKey());
+					resourceWorkingTime.put(entry.getKey(), time + entry.getValue());
+				}
+			}
+		}
+
+		// Get the average working time for all resources.
+		double average = 0;
+		for (Map.Entry<Integer, Long> entry: resourceWorkingTime.entrySet()) {
+			average += entry.getValue();
+		}
+		return average/resourceWorkingTime.size();
 	}
 
 	private LocalDateTime getSolutionLatestEndTime(List<Variable> variables, LocalDateTime earliestStartDate) {

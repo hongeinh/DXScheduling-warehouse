@@ -6,13 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import variable.component.resource.impl.HumanResource;
+import variable.component.resource.impl.MachineResource;
+import variable.component.timeslot.TimeSlot;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -135,11 +134,12 @@ public class Order implements Variable{
 		return elapsedTime;
 	}
 
-	public Map<HumanResource, Long> getHumanResourcesWorkingTime (ChronoUnit unit) {
+	public Map<Integer, Long> getHumanResourcesWorkingTime (ChronoUnit unit) {
 		// TODO
 		List<HumanResource> resources = new ArrayList<>();
 		List<Integer> resourceIds = new ArrayList<>();
-
+		Map<Integer, Long> resourcesWorkingTime = new HashMap<>();
+		// Get list of human resources and time slots
 		for (Task task: this.tasks) {
 			List<HumanResource> taskHumanResources = task.getRequiredHumanResources();
 			for (HumanResource humanResource: taskHumanResources) {
@@ -153,7 +153,53 @@ public class Order implements Variable{
 			}
 		}
 
+		// Sort by ID
+		Collections.sort(resources);
 
-		return null;
+		// Calculate working time from resources:
+		for (HumanResource resource: resources) {
+			List<TimeSlot> timeSlots = resource.getUsedTimeSlots();
+			long workingTime = 0;
+			for (TimeSlot timeSlot: timeSlots) {
+				workingTime += unit.between(timeSlot.getStartDateTime(), timeSlot.getEndDateTime());
+			}
+			resourcesWorkingTime.put(resource.getId(), workingTime);
+		}
+		return resourcesWorkingTime;
+	}
+
+	public Map<Integer, Long> getMachineResourcesWorkingTime (ChronoUnit unit) {
+		// TODO
+		List<MachineResource> resources = new ArrayList<>();
+		List<Integer> resourceIds = new ArrayList<>();
+		Map<Integer, Long> resourcesWorkingTime = new HashMap<>();
+		// Get list of machine resources
+		for (Task task: this.tasks) {
+			List<MachineResource> taskHumanResources = task.getRequiredMachinesResources();
+			for (MachineResource humanResource: taskHumanResources) {
+				if (!resourceIds.contains(humanResource.getId())) {
+					resourceIds.add(humanResource.getId());
+					resources.add(DataUtil.cloneBean(humanResource));
+				} else {
+					resources.get(humanResource.getId())
+							.addTimeSlots(humanResource.getUsedTimeSlots());
+				}
+			}
+		}
+
+		// Sort by ID
+		Collections.sort(resources);
+
+		// Calculate working time from resources:
+		for (MachineResource resource: resources) {
+			List<TimeSlot> timeSlots = resource.getUsedTimeSlots();
+			long workingTime = 0;
+			for (TimeSlot timeSlot: timeSlots) {
+				workingTime += unit.between(timeSlot.getStartDateTime(), timeSlot.getEndDateTime());
+			}
+			resourcesWorkingTime.put(resource.getId(), workingTime);
+		}
+
+		return resourcesWorkingTime;
 	}
 }

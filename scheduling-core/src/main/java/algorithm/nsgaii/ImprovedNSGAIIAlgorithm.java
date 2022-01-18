@@ -1,22 +1,26 @@
 package algorithm.nsgaii;
 
-import variable.Variable;
 import problem.Problem;
 import representation.Solution;
 import utils.NumberUtil;
+import variable.Variable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm{
+public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm {
 
-	public ImprovedNSGAIIAlgorithm(){
+	public ImprovedNSGAIIAlgorithm() {
 		super();
 	}
 
 	public ImprovedNSGAIIAlgorithm(int solutionSetSize, int numberOfGeneration, int eliteSolutionSet) {
 		super(solutionSetSize, numberOfGeneration, eliteSolutionSet);
+	}
+
+	public void recalculateSolutionDetails(List<Solution> offspringSolutions, Problem problem) {
+		problem.getVariableController().recalculateSolutionDetails(offspringSolutions);
 	}
 
 	@Override
@@ -28,27 +32,27 @@ public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm{
 
 		int i = 0;
 		int seed = 1;
-		while(i < this.solutionSetSize) {
+		while (i < this.solutionSetSize) {
 
 			double upperBound = (seed >= maxDuration * maxWeight) ? seed : (maxDuration * maxWeight);
-			double lowerBound =  (seed <= maxDuration * maxWeight) ? seed : (maxDuration * maxWeight);
+			double lowerBound = (seed <= maxDuration * maxWeight) ? seed : (maxDuration * maxWeight);
 			double rand = NumberUtil.getRandomDoubleNumber(lowerBound, upperBound);
 			double delim = NumberUtil.getRandomDoubleNumber(rand, rand * maxDuration);
 			rand = delim / rand;
 			Solution initialSolution = createInitialSolution(problem, rand);
 			double[] constraints = problem.evaluateConstraints(initialSolution);
 			System.out.print("-- Create solution: " + i + "; ");
-			if (constraints[1] == 0) {
+//			if (constraints[1] == 0) {
 //				if (constraints[0] < 0.6 && constraints[1] == 0) {
 
-					if (initialSolution.notExistIn(solutions)) {
-					System.out.println("+ Solution " + i);
-					initialSolution.setId(i);
-					solutions.add(initialSolution);
-					i++;
+			if (initialSolution.notExistIn(solutions)) {
+				System.out.println("+ Solution " + i);
+				initialSolution.setId(i);
+				solutions.add(initialSolution);
+				i++;
 
-				}
 			}
+//			}
 			seed++;
 		}
 		return solutions;
@@ -61,10 +65,6 @@ public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm{
 		List<Variable> variables = problem.getVariableController().setupVariables(problem.getParameters(), k);
 		solution.setVariables(variables);
 		return solution;
-	}
-
-	public void recalculateSolutionDetails(List<Solution> offspringSolutions, Problem problem) {
-		problem.getVariableController().recalculateSolutionDetails(offspringSolutions);
 	}
 
 }

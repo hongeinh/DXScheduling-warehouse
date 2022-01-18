@@ -3,6 +3,7 @@ package variable.component.resource;
 import common.STATUS;
 import common.TYPE;
 import lombok.*;
+import variable.Variable;
 import variable.component.timeslot.TimeSlot;
 
 import java.io.Serializable;
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resource implements Serializable {
+public class Resource implements Serializable, Comparable<Resource> {
 
 	public static int resourceId = 0;
 	protected int id;
@@ -42,5 +43,16 @@ public class Resource implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int compareTo(Resource o) {
+		if(this.id < o.getId()) {
+			return -1;
+		} else if (this.id > o.getId()) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }
