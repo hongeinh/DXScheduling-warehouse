@@ -156,7 +156,6 @@ public class FixedMultiorderVariableController extends VariableController {
 	}
 
 	protected List<Variable> assignResources(List<Variable> orders, Map<String, List<? extends Resource>> resources, double k) {
-		// TODO
 		return orders;
 	}
 

@@ -41,7 +41,6 @@ public class ResourceManager {
 	 * @return
 	 */
 	public <T extends Resource> T getAvailableResource(List<T> requiredResources, LocalDateTime time) {
-		// TODO
 		if (requiredResources.isEmpty()) {
 			return null;
 		}

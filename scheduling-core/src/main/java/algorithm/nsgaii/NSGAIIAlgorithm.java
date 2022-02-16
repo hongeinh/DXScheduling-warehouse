@@ -113,9 +113,7 @@ public class NSGAIIAlgorithm extends Algorithm {
 	}
 
 	public void recalculateSolutionDetails(List<Solution> offspringSolutions, Problem problem) {
-//		for (Solution solution : offspringSolutions) {
-//			problem.getVariableController().recalculateSolutionDetails(offspringSolutions);
-//		}
+		// TODO
 	}
 
 	public List<Solution> createInitialSolutionSet(Problem problem) throws IOException {

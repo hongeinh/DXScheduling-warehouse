@@ -135,7 +135,6 @@ public class Order implements Variable{
 	}
 
 	public Map<Integer, Long> getHumanResourcesWorkingTime (ChronoUnit unit) {
-		// TODO
 		List<HumanResource> resources = new ArrayList<>();
 		List<Integer> resourceIds = new ArrayList<>();
 		Map<Integer, Long> resourcesWorkingTime = new HashMap<>();
@@ -169,7 +168,6 @@ public class Order implements Variable{
 	}
 
 	public Map<Integer, Long> getMachineResourcesWorkingTime (ChronoUnit unit) {
-		// TODO
 		List<MachineResource> resources = new ArrayList<>();
 		List<Integer> resourceIds = new ArrayList<>();
 		Map<Integer, Long> resourcesWorkingTime = new HashMap<>();

@@ -41,7 +41,7 @@ public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm {
 			rand = delim / rand;
 			Solution initialSolution = createInitialSolution(problem, rand);
 			double[] constraints = problem.evaluateConstraints(initialSolution);
-			System.out.print("-- Create solution: " + i + "; ");
+//			System.out.print("-- Create solution: " + i + "; ");
 //			if (constraints[1] == 0) {
 //				if (constraints[0] < 0.6 && constraints[1] == 0) {
 

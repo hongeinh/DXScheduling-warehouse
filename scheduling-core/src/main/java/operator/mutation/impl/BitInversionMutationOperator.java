@@ -24,6 +24,7 @@ public class BitInversionMutationOperator extends MutationOperator {
     }
 
     public Solution mutate(Solution mutatedSolution, double geneMutationProbability) {
+        // TODO
         for (int i = 0; i < mutatedSolution.getVariables().size(); i++) {
             Variable variable = mutatedSolution.getVariables().get(i);
             double probability = Math.random();
