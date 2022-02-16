@@ -1,9 +1,7 @@
 package variable.controller.impl;
 
-import common.STATUS;
 import representation.Solution;
 import utils.DataUtil;
-import utils.ObjectUtil;
 import variable.Variable;
 import variable.component.resource.Resource;
 import variable.component.resource.impl.HumanResource;

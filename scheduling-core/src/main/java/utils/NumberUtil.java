@@ -7,7 +7,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class NumberUtil {
 	public static int getRandomIntNumber(int min, int max) {
-		return ThreadLocalRandom.current().nextInt(min, max + 1);
+		double rand = getRandomDoubleNumber(min, max);
+		double floored = Math.floor(rand);
+		if (rand - floored >= 0.5) {
+			return (int) rand;
+		} else {
+			return (floored > 0) ? ((int) floored - 1) : ((int) floored);
+		}
 	}
 
 	public static double floor2DecimalPoints(double num) {

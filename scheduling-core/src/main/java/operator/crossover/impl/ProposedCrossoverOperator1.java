@@ -35,6 +35,7 @@ public class ProposedCrossoverOperator1 extends CrossoverOperator {
 
     public List<Solution> crossover(Solution a, Solution b) {
 
+        // TODO: Sua lai phan crossover
         int size = a.getVariables().size();
         int chromosomeSize = ((ArrayList) a.getVariables().get(0).getValue()).size();
 

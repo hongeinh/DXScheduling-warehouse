@@ -45,13 +45,17 @@ public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm {
 //			if (constraints[1] == 0) {
 //				if (constraints[0] < 0.6 && constraints[1] == 0) {
 
-			if (initialSolution.notExistIn(solutions)) {
-				System.out.println("+ Solution " + i);
-				initialSolution.setId(i);
-				solutions.add(initialSolution);
-				i++;
+//			if (initialSolution.notExistIn(solutions)) {
+//				System.out.println("+ Solution " + i);
+//				initialSolution.setId(i);
+//				solutions.add(initialSolution);
+//				i++;
+//
+//			}
 
-			}
+			initialSolution.setId(i);
+			solutions.add(initialSolution);
+			i++;
 //			}
 			seed++;
 		}

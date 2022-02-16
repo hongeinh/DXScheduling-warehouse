@@ -48,9 +48,9 @@ public class MultiorderTaskSchedulingProblem extends TaskSchedulingResourceAlloc
 	@Override
 	public Solution evaluate(Solution solution) {
 		solution = evaluateIdleDuration(solution);
-//		solution = evaluateQuality(solution);
+		solution = evaluateQuality(solution);
 		solution = evaluateTotalCost(solution);
-		solution = evaluateWorkBalance(solution);
+//		solution = evaluateWorkBalance(solution);
 		return solution;
 	}
 
@@ -173,16 +173,32 @@ public class MultiorderTaskSchedulingProblem extends TaskSchedulingResourceAlloc
 	 * */
 	private Solution evaluateQuality(Solution solution) {
 		List<Variable> variables = solution.getVariables();
-		double timeQuality = 0;
+//		double timeQuality = 0;
+//		for (Variable variable: variables) {
+//			Order order = (Order) variable;
+//			double totalTimeSpent = order.getTotalTimeSpent();
+//			double totalTimeAllowed = order.getTotalTimeAllowed();
+//			if (totalTimeAllowed == 0 || totalTimeSpent == 0)
+//				continue;
+//			timeQuality += totalTimeSpent <= totalTimeAllowed ? 1 : (totalTimeAllowed/totalTimeSpent);
+//		}
+//		solution.getObjectives()[1] = timeQuality/variables.size();
+		double avgQuality = 0;
 		for (Variable variable: variables) {
 			Order order = (Order) variable;
-			double totalTimeSpent = order.getTotalTimeSpent();
-			double totalTimeAllowed = order.getTotalTimeAllowed();
-			if (totalTimeAllowed == 0 || totalTimeSpent == 0)
-				continue;
-			timeQuality += totalTimeSpent <= totalTimeAllowed ? 1 : (totalTimeAllowed/totalTimeSpent);
+			List<Task> tasks = order.getTasks();
+			double orderQuality = 0;
+			for (Task task: tasks) {
+				List<HumanResource> humanResources = task.getRequiredHumanResources();
+				for (HumanResource humanResource: humanResources) {
+					double experience = humanResource.getAverageExp();
+					orderQuality += experience;
+				}
+				orderQuality /= task.getNumberOfUsefulSkills();
+			}
+			avgQuality += orderQuality/tasks.size();
 		}
-		solution.getObjectives()[1] = timeQuality/variables.size();
+		solution.getObjectives()[1] = variables.size() / avgQuality;
 		return solution;
 	}
 

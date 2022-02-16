@@ -83,8 +83,8 @@ public class ResourceManager {
 	 * @return
 	 */
 	private <T extends Resource> T calculateNextAvailableResource(List<T> resourceList) {
-		int rand = NumberUtil.getRandomIntNumber(0, resourceList.size() - 1);
-		T randomResource = resourceList.get(rand);
+		double rand = NumberUtil.getRandomDoubleNumber(0, (double)resourceList.size() - 1);
+		T randomResource = resourceList.get((int) Math.floor(rand));
 		T returnResource = DataUtil.cloneBean(randomResource);
 		List<TimeSlot> randomResourceTimeSlot = randomResource.getUsedTimeSlots();
 		returnResource.getUsedTimeSlots().clear();

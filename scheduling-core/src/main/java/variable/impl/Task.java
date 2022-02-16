@@ -7,6 +7,7 @@ import variable.component.resource.Resource;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import variable.component.skill.Skill;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -160,5 +161,16 @@ public class Task implements Comparable<Task>, Serializable {
 
 	public String getMachineResourceString() {
 		return getAssignedResourceIdsString(requiredMachinesResources, " ");
+	}
+
+	public double getNumberOfUsefulSkills() {
+		List<Skill> skills = this.getRequiredHumanResources().get(0).getSkills();
+		int count = 0;
+		for (Skill skill: skills) {
+			if (skill.getExperienceLevel() > 0) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

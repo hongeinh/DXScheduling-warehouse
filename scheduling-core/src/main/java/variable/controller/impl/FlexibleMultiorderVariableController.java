@@ -36,8 +36,8 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 	protected List<Variable> assignResources(List<Variable> orders, Map<String, List<? extends Resource>> resources, double k) {
 		this.resourceManager.setResourcesMap(resources);
 
-		int taskSize = ((List) orders.get(0).getValue()).size();
 		int orderSize = orders.size();
+		int taskSize = ((List) orders.get(0).getValue()).size();
 
 		LocalDateTime currentTimeSlot = now;
 		for (int i = 0; i < taskSize; i++) {
