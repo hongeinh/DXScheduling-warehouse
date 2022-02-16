@@ -69,10 +69,10 @@ public class ProposedCrossoverOperator1 extends CrossoverOperator {
         int j = crossoverA.size() - 1;
         for (int i = position1; i < position2; i++) {
             variablesA.remove(i);
-            variablesA.add(i, crossoverA.get(j));
+            variablesA.add(i, crossoverB.get(j));
 
             variablesB.remove(i);
-            variablesB.add(i, crossoverB.get(j));
+            variablesB.add(i, crossoverA.get(j));
             j--;
         }
 

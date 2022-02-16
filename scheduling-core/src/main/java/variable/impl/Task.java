@@ -1,6 +1,7 @@
 package variable.impl;
 
 import common.STATUS;
+import utils.DataUtil;
 import variable.component.resource.impl.HumanResource;
 import variable.component.resource.impl.MachineResource;
 import variable.component.resource.Resource;
@@ -172,5 +173,26 @@ public class Task implements Comparable<Task>, Serializable {
 			}
 		}
 		return count;
+	}
+
+	public int changeHumanResourceStatus(HumanResource humanResource, STATUS assigned) {
+		humanResource.setStatus(assigned);
+		int size = this.requiredHumanResources.size();
+		int index = 0;
+		for (int i = 0; i < size; i++) {
+			if (this.requiredHumanResources.get(i).getId() == humanResource.getId()) {
+				this.requiredHumanResources.remove(i);
+				this.requiredHumanResources.add(i, humanResource);
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public void changeResourcePosition(int index, int i) {
+		HumanResource humanResource = DataUtil.cloneBean(this.requiredHumanResources.get(index));
+		this.requiredHumanResources.remove(index);
+		this.requiredHumanResources.add(0, humanResource);
+
 	}
 }

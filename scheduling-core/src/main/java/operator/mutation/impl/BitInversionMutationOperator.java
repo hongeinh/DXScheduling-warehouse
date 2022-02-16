@@ -30,27 +30,38 @@ public class BitInversionMutationOperator extends MutationOperator {
             double probability = Math.random();
 
             if (probability < geneMutationProbability) {
+                // position la doi voi task
                 int pos1 = 0;
                 int pos2 = 0;
 
                 List<Task> tasks = (List<Task>) variable.getValue();
                 while (pos1 == pos2 && pos1 == 0) {
-                    pos1 = NumberUtil.getRandomIntNumber(0, ((List<Task>) variable.getValue()).size());
-                    pos2 = NumberUtil.getRandomIntNumber(0, ((List<Task>)  variable.getValue()).size());
+                    pos1 = NumberUtil.getRandomIntNumber(0, ((List<Task>) variable.getValue()).size() - 1);
+                    pos2 = NumberUtil.getRandomIntNumber(0, ((List<Task>)  variable.getValue()).size() - 1);
                     if (pos1 > pos2) {
                         int temp = pos1;
                         pos1 = pos2;
                         pos2 = temp;
                     }
                 }
-                int mutatedChromosome = NumberUtil.getRandomIntNumber(0, tasks.get(0).getRequiredHumanResources().size());
+                int mutatedChromosome = NumberUtil.getRandomIntNumber(0, tasks.get(0).getRequiredHumanResources().size() - 1);
+//                System.out.println("Mutated: " + mutatedChromosome);
+//                for (int j = pos1; j <= pos2; j++) {
+//                    double random = Math.random();
+//                    HumanResource resource = tasks.get(j).getRequiredHumanResources().get(mutatedChromosome);
+//                    if (resource.getStatus() != STATUS.ASSIGNED && random < 0.5) {
+//                        resource.setStatus(STATUS.ASSIGNED);
+//                    } else if (resource.getStatus() == STATUS.ASSIGNED && random < 0.5) {
+//                        resource.setStatus(STATUS.NOT_ASSIGNED);
+//                    }
+//                }
                 for (int j = pos1; j <= pos2; j++) {
                     double random = Math.random();
-                    HumanResource resource = tasks.get(i).getRequiredHumanResources().get(mutatedChromosome);
-                    if (resource.getStatus() != STATUS.ASSIGNED && random < 0.5) {
+//                    int index = NumberUtil.getRandomIntNumber(pos1, pos2);
+                    HumanResource resource = tasks.get(j).getRequiredHumanResources().get(mutatedChromosome);
+                    if (random < 0.5 && j != 0) {
                         resource.setStatus(STATUS.ASSIGNED);
-                    } else if (resource.getStatus() == STATUS.ASSIGNED && random < 0.5) {
-                        resource.setStatus(STATUS.NOT_ASSIGNED);
+                        tasks.get(j).getRequiredHumanResources().get(0).setStatus(STATUS.NOT_ASSIGNED);
                     }
                 }
                 double mutatedWeight = NumberUtil.floor2DecimalPoints(Math.random());

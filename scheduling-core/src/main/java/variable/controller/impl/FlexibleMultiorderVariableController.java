@@ -71,8 +71,11 @@ public class FlexibleMultiorderVariableController extends FixedMultiorderVariabl
 					humanResource.getUsedTimeSlots().clear();
 					humanResource.getUsedTimeSlots().add(timeSlot);
 					humanResource.setStatus(STATUS.ASSIGNED);
-					task.getRequiredHumanResources().clear();
-					task.getRequiredHumanResources().add(humanResource);
+					//TODO: sua lai ko clear nua
+//					task.getRequiredHumanResources().clear();
+//					task.getRequiredHumanResources().add(humanResource);
+					int index = task.changeHumanResourceStatus(humanResource, STATUS.ASSIGNED);
+					task.changeResourcePosition(index, 0);
 					humanResource.getUsedTimeSlots().add(timeSlot);
 					this.resourceManager.addTimeSlot(humanResource);
 				} else if (machineResource != null ) {

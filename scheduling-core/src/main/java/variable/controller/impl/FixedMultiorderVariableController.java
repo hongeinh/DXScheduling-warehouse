@@ -1,5 +1,6 @@
 package variable.controller.impl;
 
+import common.STATUS;
 import representation.Solution;
 import utils.DataUtil;
 import variable.Variable;
@@ -179,6 +180,7 @@ public class FixedMultiorderVariableController extends VariableController {
 			for (int i = 0; i < numberOfHumanResources; i++) {
 				if (usefulHumanResourcesMap[task.getId()][i] == 1) {
 					HumanResource humanResource = DataUtil.cloneBean(hResources.get(i));
+					humanResource.setStatus(STATUS.NOT_ASSIGNED);
 					humanResources.add(humanResource);
 				}
 			}
@@ -186,8 +188,9 @@ public class FixedMultiorderVariableController extends VariableController {
 			// Get useful machine resource
 			for (int i = 0; i < numberOfMachineResources; i++) {
 				if (usefulMachineResourceMap[task.getId()][i] == 1) {
-					MachineResource machineResourceResource = DataUtil.cloneBean(mResources.get(i));
-					machineResources.add(machineResourceResource);
+					MachineResource machineResource = DataUtil.cloneBean(mResources.get(i));
+					machineResource.setStatus(STATUS.NOT_ASSIGNED);
+					machineResources.add(machineResource);
 				}
 			}
 
