@@ -1,6 +1,7 @@
 package utils;
 
 import variable.Variable;
+import variable.impl.Order;
 import variable.impl.Task;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -142,8 +143,14 @@ public class FileUtil {
 				XSSFCell thirdObjectiveCell = solutionRow.createCell(5);
 				thirdObjectiveCell.setCellValue(solution.getObjectives()[2]);
 
+				XSSFCell variableIdCell = solutionRow.createCell(6);
+				StringBuilder idString = new StringBuilder("");
 				for (int j = 0; j < numberOfVariables; j++) {
-					XSSFCell variableCell = solutionRow.createCell(6 + j);
+					idString.append(((Order)solution.getVariables().get(j)).getId()).append(",") ;
+				}
+				variableIdCell.setCellValue(idString.toString());
+				for (int j = 0; j < numberOfVariables; j++) {
+					XSSFCell variableCell = solutionRow.createCell(7 + j);
 					variableCell.setCellValue(solution.getVariables().get(j).toString());
 				}
 			}

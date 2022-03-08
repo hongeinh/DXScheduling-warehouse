@@ -2,6 +2,7 @@ package algorithm.nsgaii;
 
 import problem.Problem;
 import representation.Solution;
+import utils.DataUtil;
 import utils.NumberUtil;
 import variable.Variable;
 
@@ -39,25 +40,28 @@ public class ImprovedNSGAIIAlgorithm extends NSGAIIAlgorithm {
 			double rand = NumberUtil.getRandomDoubleNumber(lowerBound, upperBound);
 			double delim = NumberUtil.getRandomDoubleNumber(rand, rand * maxDuration);
 			rand = delim / rand;
+
 			Solution initialSolution = createInitialSolution(problem, rand);
+
 			double[] constraints = problem.evaluateConstraints(initialSolution);
+			// TODO: Them constraint
 //			System.out.print("-- Create solution: " + i + "; ");
 //			if (constraints[1] == 0) {
-//				if (constraints[0] < 0.6 && constraints[1] == 0) {
+//			if (constraints[0] < 0.6 && constraints[1] == 0) {
 
-//			if (initialSolution.notExistIn(solutions)) {
-//				System.out.println("+ Solution " + i);
-//				initialSolution.setId(i);
-//				solutions.add(initialSolution);
-//				i++;
-//
-//			}
+//				if (initialSolution.notExistIn(solutions)) {
+//					System.out.println("+ Solution " + i);
+//					initialSolution.setId(i);
+//					solutions.add(initialSolution);
+//					i++;
+//				}
 
-			initialSolution.setId(i);
-			solutions.add(initialSolution);
-			i++;
+				initialSolution.setId(i);
+				solutions.add(DataUtil.cloneBean(initialSolution));
+				i++;
 //			}
 			seed++;
+//			}
 		}
 		return solutions;
 	}

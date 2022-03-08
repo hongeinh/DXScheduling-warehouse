@@ -7,6 +7,7 @@ import lombok.Setter;
 import operator.Operator;
 import problem.Problem;
 import representation.Solution;
+import utils.DataUtil;
 import utils.FileUtil;
 
 import java.io.IOException;
@@ -45,8 +46,6 @@ public class NSGAIIAlgorithm extends Algorithm {
 	}
 
 	public List<Solution> executeAlgorithm(Problem problem) throws IOException {
-		long startTime = System.currentTimeMillis();
-		long executionTime = 0;
 
 		int numberOfOrders = (int) problem.getParameters().get("numberOfOrders");
 
@@ -54,6 +53,9 @@ public class NSGAIIAlgorithm extends Algorithm {
 		System.out.print("- Create initial solution set -- ");
 		List<Solution> solutions = createInitialSolutionSet(problem);
 		System.out.println("Initial size: " + solutions.size());
+
+//		String unparentFilePath = FileUtil.createResultDirectory("unparent", numberOfOrders );
+//		FileUtil.writeSolutionResult(unparentFilePath, solutions);
 
 		/* Step 2: Evaluate the initial solution set, calculate objectives for each solution */
 		System.out.println("- Evaluate initial solution set");
@@ -129,7 +131,8 @@ public class NSGAIIAlgorithm extends Algorithm {
 
 	public List<Solution> reproduceOffspringSolutionSet(List<Solution> solutions, int numberOfGenerations) {
 
-		List<Solution> offspringSolutions = reproduceOffspringGenerations(solutions, numberOfGenerations);
+		List<Solution> offsprings = reproduceOffspringGenerations(solutions, numberOfGenerations);
+		List<Solution> offspringSolutions = DataUtil.cloneBean(offsprings);
 //		offspringSolutions = removeIdenticalSolutions(offspringSolutions);
 		this.getComparator().computeRankAndDistance(offspringSolutions);
 		int size = offspringSolutions.size();
@@ -189,7 +192,7 @@ public class NSGAIIAlgorithm extends Algorithm {
 			matingParentSolutions = (List<Solution>) operators.get(0).execute(solutions);
 			List<Solution> tempOffspringSolutions = (List<Solution>) operators.get(1).execute(matingParentSolutions);
 			tempOffspringSolutions = (List<Solution>) operators.get(2).execute(tempOffspringSolutions);
-			offspringSolutions.addAll(tempOffspringSolutions);
+			offspringSolutions.addAll(DataUtil.cloneBean(tempOffspringSolutions));
 //			offspringSolutions = removeIdenticalSolutions(offspringSolutions);
 		}
 		solutions.addAll(offspringSolutions);

@@ -23,9 +23,11 @@ public class FixedMultiorderVariableController extends VariableController {
 		tasks = this.getUsefulResource(tasks, resources, parameters);
 
 		for (Variable order: orders) {
-			order.setValue(tasks);
+			List<Task> orderTask = DataUtil.cloneBean(tasks);
+			order.setValue(orderTask);
 		}
-		Collections.sort(orders);
+//		Collections.sort(orders);
+		Collections.shuffle(orders);
 		orders = this.assignResources(orders, resources, k);
 
 		return orders;
@@ -38,7 +40,7 @@ public class FixedMultiorderVariableController extends VariableController {
 
 	protected List<Variable> setupOrders(Map<Object, Object> parameters) {
 		List<Variable> orders = (List<Variable>) parameters.get("orders");
-
+		Collections.shuffle(orders);
 		return orders;
 	}
 
@@ -161,7 +163,6 @@ public class FixedMultiorderVariableController extends VariableController {
 	}
 
 	private List<Task> getUsefulResource(List<Task> tasks, Map<String, List<? extends Resource>> resources, Map<Object, Object> parameters) {
-		// TODO: implement chua hoan thien
 		int numberOfHumanResources = (int) parameters.get("numberOfHumanResources");
 		double[][] usefulHumanResourcesMap = getUsefulHumaResourcesMap(parameters);
 		double[][] usefulMachineResourceMap = (double [][]) parameters.get("mreq");
@@ -190,6 +191,7 @@ public class FixedMultiorderVariableController extends VariableController {
 				if (usefulMachineResourceMap[task.getId()][i] == 1) {
 					MachineResource machineResource = DataUtil.cloneBean(mResources.get(i));
 					machineResource.setStatus(STATUS.NOT_ASSIGNED);
+					machineResource.setCost(machineCosts[i]);
 					machineResources.add(machineResource);
 				}
 			}

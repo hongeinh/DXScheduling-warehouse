@@ -87,6 +87,7 @@ public class TestMultiorder {
 					.weight(TSRAScenario.weights[i])
 					.penaltyRate(TSRAScenario.orderPenaltyRate[i])
 					.totalTimeAllowed(TSRAScenario.orderDeadlines[i])
+					.tasks(new ArrayList<>())
 					.build();
 			orders.add(order);
 		}

@@ -9,7 +9,6 @@ import utils.DataUtil;
 import utils.NumberUtil;
 import utils.TimeUtils;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +38,8 @@ public class ProposedCrossoverOperator1 extends CrossoverOperator {
 
         int size = a.getVariables().size();
         int chromosomeSize = a.getVariables().size();
+
+        // Position trong gene ~ thu tu sap xep order trong list
         int position1 = 0;
         int position2 = 0;
         while (position1 >= position2) {

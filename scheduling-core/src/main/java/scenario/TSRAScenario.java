@@ -2,7 +2,7 @@ package scenario;
 
 public class TSRAScenario {
 
-	public static final int numberOfOrders = 3;
+	public static final int numberOfOrders = 7;
 
 	public static final int numberOfTasks = 19;
 
@@ -12,9 +12,9 @@ public class TSRAScenario {
 
 	public static final int numberOfSkills = 5;
 
-	public static final double[] orderDeadlines = {200, 180, 300};
+	public static final double[] orderDeadlines = {200, 180, 300, 600, 700, 550, 150};
 
-	public static final double[] orderPenaltyRate = {30, 60, 50};
+	public static final double[] orderPenaltyRate = {30, 60, 50, 20, 45, 66, 12};
 
 	public static final long[] durations = {1, 1, 2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 2, 1, 3, 2, 3, 2, 3};
 

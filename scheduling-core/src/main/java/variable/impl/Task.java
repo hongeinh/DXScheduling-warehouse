@@ -48,10 +48,7 @@ public class Task implements Comparable<Task>, Serializable {
 		StringBuilder stringBuilder = new StringBuilder();
 		String DELIMETER = ", ";
 
-		stringBuilder.append(this.orderId + DELIMETER +
-								this.id + DELIMETER +
-								this.startTime + DELIMETER +
-								this.duration + DELIMETER);
+		stringBuilder.append(this.id + DELIMETER);
 
 		stringBuilder.append(getAssignedResourceIdsString(requiredHumanResources, " "));
 		stringBuilder.append(DELIMETER);
